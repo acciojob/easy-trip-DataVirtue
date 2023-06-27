@@ -59,6 +59,7 @@ public class AirportRepository {
     public String addFlight(Flight flight) {
 
         flightMap.put(flight.getFlightId(),flight);
+//        flightPassengerMap.put(flight.getFlightId(),new HashSet<>())
 
         return "SUCCESS";
     }
@@ -86,7 +87,7 @@ public class AirportRepository {
         if(passengerFlightMap.containsKey(passengerId)){
             return "FAILURE"; // passenger already booked a flight
         }
-        if (flightMap.get(flightId).getMaxCapacity()==flightPassengerMap.get(flightId).size()){
+        if (flightPassengerMap.get(flightId)!=null && flightMap.get(flightId).getMaxCapacity()==flightPassengerMap.get(flightId).size()){
             return "FAILURE"; // capacity full
         }
         Set<Integer> passengerList = flightPassengerMap.getOrDefault(flightId,new HashSet<>());
