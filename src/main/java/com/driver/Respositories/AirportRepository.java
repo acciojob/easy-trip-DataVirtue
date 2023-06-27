@@ -46,7 +46,7 @@ public class AirportRepository {
             if(max.getNoOfTerminals()<airport.getNoOfTerminals()){
                 max = airport;
             }else if(max.getNoOfTerminals()==airport.getNoOfTerminals()){
-                if(max.getAirportName().compareTo(airport.getAirportName())==1){
+                if(max.getAirportName().compareTo(airport.getAirportName())==-1){
                     max = airport;
                 }
             }
@@ -78,6 +78,10 @@ public class AirportRepository {
                 }
 
             }
+        }
+
+        if(min==Double.MAX_VALUE) {
+            return -1;
         }
         return min;
     }
@@ -119,14 +123,14 @@ public class AirportRepository {
     public String getAirportNameFromFlightId(Integer flightId) {
 
         if(!flightMap.containsKey(flightId)){
-            return "FAILURE";
+            return null;
         }
 
         for(Airport airport: airportMap.values()){
             if(String.valueOf(airport.getCity()).equals(String.valueOf(flightMap.get(flightId).getFromCity())))
                 return airport.getAirportName();
         }
-        return "FAILURE";
+        return null;
 
     }
 
