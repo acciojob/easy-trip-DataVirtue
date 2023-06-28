@@ -80,4 +80,9 @@ public class AirportService {
 
         return 3000  + passengers.size()*50;
     }
+
+    public int countOfBookingsDoneByPassengerAllCombined(Integer passengerId) {
+
+        return airportRepository.countOfBookingsDoneByPassengerAllCombined(passengerId);
+    }
 }

@@ -15,7 +15,7 @@ public class AirportRepository {
     Map<Integer, Flight> flightMap;
 
 
-    Map<Integer,Integer> passengerFlightMap;
+    Map<Integer,Set<Integer>> passengerFlightMap;
 
     Map<Integer, Set<Integer>> flightPassengerMap; // flight id and list of passengers
 
@@ -43,7 +43,7 @@ public class AirportRepository {
         Airport max = dummyport;
 
         for(Airport airport: airportMap.values()){
-            if(max.getNoOfTerminals()<airport.getNoOfTerminals()){
+            if(max.getNoOfTerminals()<=airport.getNoOfTerminals()){
                 max = airport;
             }else if(max.getNoOfTerminals()==airport.getNoOfTerminals()){
                 if(max.getAirportName().compareTo(airport.getAirportName())==-1){
@@ -88,32 +88,39 @@ public class AirportRepository {
 
     public String bookATicket(Integer flightId, Integer passengerId) {
 
-        if(passengerFlightMap.containsKey(passengerId)){
-            return "FAILURE"; // passenger already booked a flight
-        }
+//        if(passengerFlightMap.containsKey(passengerId)){
+//            return "FAILURE"; // passenger already booked a flight
+//        }
         if (flightPassengerMap.get(flightId)!=null && flightMap.get(flightId).getMaxCapacity()==flightPassengerMap.get(flightId).size()){
             return "FAILURE"; // capacity full
+        }
+        if(flightPassengerMap.get(flightId)!=null && flightPassengerMap.get(flightId).contains(passengerId)){
+            return  "FAILURE"; // already booked the same flight
         }
         Set<Integer> passengerList = flightPassengerMap.getOrDefault(flightId,new HashSet<>());
         passengerList.add(passengerId);
 
         flightPassengerMap.put(flightId,passengerList);
 
-        passengerFlightMap.put(passengerId,flightId);
+        Set<Integer> flightList = passengerFlightMap.getOrDefault(passengerId,new HashSet<>());
+        flightList.add(flightId);
+
+        passengerFlightMap.put(passengerId,flightList);
 
 
         return "SUCCESS";
     }
 
     public String cancelATicket(Integer flightId, Integer passengerId) {
-        if(!passengerFlightMap.containsKey(passengerId)){
-            return "FAILURE"; // No flight booked
+
+        if(passengerFlightMap.get(passengerId) == null || !passengerFlightMap.get(passengerId).contains(flightId)) {
+            return "FAILURE"; // No flight booked or not this flight booked
         }
         if(!flightPassengerMap.containsKey(flightId) || flightPassengerMap.get(flightId)==null || !flightPassengerMap.get(flightId).contains(passengerId)){
             return "FAILURE"; //invalid flight id or wrong flight id
         }
 
-        passengerFlightMap.remove(passengerId);
+        passengerFlightMap.get(passengerId).remove(flightId);
 
         flightPassengerMap.get(flightId).remove(passengerId);
 
@@ -150,5 +157,11 @@ public class AirportRepository {
 
     public Set<Integer> getFlightPassengers(Integer flightId) {
        return flightPassengerMap.get(flightId);
+    }
+
+    public int countOfBookingsDoneByPassengerAllCombined(Integer passengerId) {
+        if(passengerFlightMap.get(passengerId)==null)
+            return 0;
+        return passengerFlightMap.get(passengerId).size();
     }
 }
