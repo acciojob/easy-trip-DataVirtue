@@ -59,7 +59,7 @@ public class AirportController {
         //Calculate the total number of people who have flights on that day on a particular airport
         //This includes both the people who have come for a flight and who have landed on an airport after their flight
 
-        return 0;
+        return  airportService.getNumberOfPeopleOn(date,airportName);
     }
 
     @GetMapping("/calculate-fare")

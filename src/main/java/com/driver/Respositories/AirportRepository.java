@@ -164,4 +164,36 @@ public class AirportRepository {
             return 0;
         return passengerFlightMap.get(passengerId).size();
     }
+
+    public int getNumberOfPeopleOn(Date date, String airportName) {
+
+        Airport airport = airportMap.get(airportName);
+        String airportCity = String.valueOf(airport.getCity());
+        int sum = 0;
+
+        for(int flightId: flightPassengerMap.keySet()){
+
+            Flight flight = flightMap.get(flightId);
+
+            if(!flight.getFlightDate().equals(date)){
+                continue;
+            }
+
+            String fCity = String.valueOf(flight.getFromCity());
+            String tCity = String.valueOf(flight.getToCity());
+
+            if(!fCity.equals(airportCity) && !tCity.equals(airportCity)) {
+                continue;
+            }
+
+            if(flightPassengerMap.get(flightId)==null) {
+                continue;
+            }
+
+            sum+= flightPassengerMap.get(flightId).size();
+
+
+        }
+        return sum;
+    }
 }

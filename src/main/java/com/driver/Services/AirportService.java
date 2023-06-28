@@ -8,6 +8,7 @@ import com.driver.model.Passenger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Set;
 
 @Service
@@ -84,5 +85,10 @@ public class AirportService {
     public int countOfBookingsDoneByPassengerAllCombined(Integer passengerId) {
 
         return airportRepository.countOfBookingsDoneByPassengerAllCombined(passengerId);
+    }
+
+    public int getNumberOfPeopleOn(Date date, String airportName) {
+
+        return airportRepository.getNumberOfPeopleOn(date,airportName);
     }
 }
