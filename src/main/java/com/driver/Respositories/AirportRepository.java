@@ -168,16 +168,21 @@ public class AirportRepository {
     public int getNumberOfPeopleOn(Date date, String airportName) {
 
         Airport airport = airportMap.get(airportName);
+        if(airport==null)
+            return 0;
+
         String airportCity = String.valueOf(airport.getCity());
         int sum = 0;
 
         if(flightPassengerMap.isEmpty())
-                return 0;
+                return 0; // no flights scheduled
 
         for(int flightId: flightPassengerMap.keySet()){
 
             Flight flight = flightMap.get(flightId);
 
+            if(flight==null)
+                continue;
 
 
             if(!flight.getFlightDate().equals(date)){
