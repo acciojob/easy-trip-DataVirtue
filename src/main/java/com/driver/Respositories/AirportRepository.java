@@ -171,9 +171,14 @@ public class AirportRepository {
         String airportCity = String.valueOf(airport.getCity());
         int sum = 0;
 
+        if(flightPassengerMap.isEmpty())
+                return 0;
+
         for(int flightId: flightPassengerMap.keySet()){
 
             Flight flight = flightMap.get(flightId);
+
+
 
             if(!flight.getFlightDate().equals(date)){
                 continue;
